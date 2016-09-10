@@ -1,0 +1,5 @@
+﻿  FlipByte.cpp
+m:\visualstudio\oop\flipbyte\flipbyte\flipbyte.cpp(26): warning C4101: 'err': unreferenced local variable
+m:\visualstudio\oop\flipbyte\flipbyte\flipbyte.cpp(32): warning C4101: 'err': unreferenced local variable
+  FlipByte.vcxproj -> M:\VisualStudio\OOP\FlipByte\Debug\FlipByte.exe
+  FlipByte.vcxproj -> M:\VisualStudio\OOP\FlipByte\Debug\FlipByte.pdb (Full PDB)
