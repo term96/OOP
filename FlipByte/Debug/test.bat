@@ -1,21 +1,23 @@
 @echo off
 
-echo Верный результат: 96, результат программы:
-flipbyte.exe 6
-pause
-cls
+flipbyte.exe 6 > result.txt
+if ERRORLEVEL 1 goto err
+fc.exe result.txt answer1.txt
 
-echo Верный результат: 255, результат программы:
-flipbyte.exe 255
-pause
-cls
+flipbyte.exe 255 > result.txt
+if ERRORLEVEL 1 goto err
+fc.exe result.txt answer2.txt
 
-echo Верный результат: 0, результат программы:
-flipbyte.exe 0
-pause
-cls
+flipbyte.exe 0 > result.txt
+if ERRORLEVEL 1 goto err
+fc.exe result.txt answer3.txt
 
-echo Верный результат: 137, результат программы:
-flipbyte.exe 145
+flipbyte.exe 145 > result.txt
+if ERRORLEVEL 1 goto err
+fc.exe result.txt answer4.txt
+
+echo Ошибок нет
 pause
-cls
+
+:err
+echo Ошибка программы

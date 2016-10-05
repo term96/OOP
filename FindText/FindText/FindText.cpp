@@ -8,31 +8,10 @@
 
 using namespace std;
 
-int main(int argc, char * argv[])
+bool FindText(ifstream & input, string const& toFind)
 {
-	// Неверное количество аргументов
-	if (argc != 3) {
-		cout << "Invalid arguments count: \n"
-			<< "Usage: findtext.exe <file name> <text to search>\n";
-		return 1;
-	}
-
-	// Искомая строка пустая
-	if (strlen(argv[2]) == 0) {
-		cout << "<text to search> should not be empty\n";
-		return 1;
-	}
-
-	// Поток для чтения из входного файла
-	ifstream input(argv[1]);
-
-	if (!input.is_open()) {
-		cout << "Failed to open " << argv[1] << " for reading\n";
-		return 1;
-	}
-
 	// Сюда будем считывать строку из файла
-	string stroke = "";
+	string line;
 	char ch = 0;
 
 	// Текущая строка
@@ -41,31 +20,54 @@ int main(int argc, char * argv[])
 	// Строка найдена хотя бы 1 раз
 	bool found = false;
 
-	while (!input.eof()) {
-		// Считываем строку
-		input.get(ch);
-		while (ch != '\n') {
-			stroke += ch;
-			if (input.eof()) {
-				break;
-			}
-			input.get(ch);
-		}
-		
-		if (stroke.find(argv[2]) != string::npos) {
+	while (!input.eof())
+	{
+		getline(input, line);
+
+		if (line.find(toFind) != string::npos)
+		{
 			cout << current << "\n";
 			found = true;
 		}
 
-		stroke = "";
+		line = "";
 		current++;
 	}
 
-	if (!found) {
+	return found;
+}
+
+int main(int argc, char * argv[])
+{
+	// Неверное количество аргументов
+	if (argc != 3)
+	{
+		cout << "Invalid arguments count: \n"
+			<< "Usage: findtext.exe <file name> <text to search>\n";
+		return 1;
+	}
+
+	// Искомая строка пустая
+	if (strlen(argv[2]) == 0)
+	{
+		cout << "<text to search> should not be empty\n";
+		return 1;
+	}
+
+	// Поток для чтения из входного файла
+	ifstream input(argv[1]);
+
+	if (!input.is_open())
+	{
+		cout << "Failed to open " << argv[1] << " for reading\n";
+		return 1;
+	}
+
+	if (!FindText(input, argv[2]))
+	{
 		cout << "Text not found\n";
 		return 1;
 	}
 
-    return 0;
+	return 0;
 }
-
