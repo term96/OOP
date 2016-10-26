@@ -1,2 +1,0 @@
-&lt;p&gt;&quot;This is a &apos;paragraph&apos;&quot;&lt;/p&gt;
-&lt;p&gt;&quot;This is a &apos;paragraph&apos;&quot;&lt;/p&gt;
