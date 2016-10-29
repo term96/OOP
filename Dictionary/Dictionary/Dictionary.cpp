@@ -4,6 +4,7 @@
 #include <fstream>
 #include <map>
 #include <string>
+#include <iterator>
 
 using namespace std;
 
@@ -25,7 +26,7 @@ void SaveChanges(Dictionary &dictionary, ofstream &file)
 	{
 		file << it->first << "\n" << it->second << "\n";
 	}
-	cout << "Изменения сохранены. До свидания.\n";
+	cout << "Изменения сохранены.\n";
 }
 
 void HandleUserInput(string const& input, Dictionary &dictionary, bool &dictionaryChanged, istream &inStream)
@@ -73,7 +74,7 @@ bool InteractionLoop(Dictionary &dictionary, istream &inStream)
 bool NeedToSave(istream &inStream)
 {
 	cout << "В словарь были внесены изменения. Введите Y или y для сохранения перед выходом.\n";
-	char answer = inStream.get();
+	char answer = static_cast<char>(inStream.get());
 
 	return (answer == 'Y' || answer == 'y');
 }

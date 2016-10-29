@@ -34,6 +34,7 @@ int main(int argc, char *argv[])
 	{
 		ofstream output(argv[1]);
 		SaveChanges(dictionary, output);
+		cout << "До свидания.\n";
 	}
 
     return 0;
