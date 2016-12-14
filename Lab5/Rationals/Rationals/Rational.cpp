@@ -193,9 +193,9 @@ bool operator>=(CRational const & left, CRational const & right)
 
 ostream& operator<<(ostream & stream, CRational & rational)
 {
-	stream << to_string(rational.m_numerator).c_str();
+	stream << rational.m_numerator;
 	stream << '/';
-	stream << to_string(rational.GetDenominator()).c_str();
+	stream << rational.m_denominator;
 
 	return stream;
 }
