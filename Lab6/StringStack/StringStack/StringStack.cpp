@@ -71,6 +71,23 @@ void CStringStack::Delete(CNode * node)
 	delete node;
 }
 
+
+CStringStack::CStringStack(CStringStack const & stack)
+try
+{
+	CNode * current = stack.m_first;
+	while (current != nullptr)
+	{
+		Push(current->m_data);
+		current = current->m_next;
+	}
+}
+catch (...)
+{
+	Delete(m_first);
+	throw;
+}
+
 CStringStack::~CStringStack()
 {
 	Delete(m_first);

@@ -37,4 +37,14 @@ BOOST_AUTO_TEST_SUITE(String_stack)
 		CStringStack stack;
 		BOOST_CHECK_THROW(stack.Pop(), length_error);
 	}
+	BOOST_AUTO_TEST_CASE(Copy_constructor)
+	{
+		CStringStack s1;
+		s1.Push("1");
+		s1.Push("2");
+
+		CStringStack s2(s1);
+		BOOST_CHECK(s2.Pop().compare("2") == 0);
+		BOOST_CHECK(s2.Pop().compare("1") == 0);
+	}
 BOOST_AUTO_TEST_SUITE_END()
