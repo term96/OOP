@@ -50,7 +50,7 @@ void CStudent::Rename(std::string const & name, std::string const & surname, std
 		m_surname = surname;
 		m_patronymic = patronymic;
 	}
-	catch (bad_alloc const &)
+	catch (...)
 	{
 		m_name = move(oldName);
 		m_surname = move(oldSurname);
