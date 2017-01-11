@@ -71,7 +71,7 @@ bool InteractionLoop(Dictionary &dictionary, istream &inStream)
 	return dictionaryChanged;
 }
 
-bool NeedToSave(istream &inStream)
+bool IsSaveNeeded(istream &inStream)
 {
 	cout << "В словарь были внесены изменения. Введите Y или y для сохранения перед выходом.\n";
 	char answer = static_cast<char>(inStream.get());

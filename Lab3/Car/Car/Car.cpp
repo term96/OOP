@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "Car.h"
 
-
 bool CCar::TurnOnEngine()
 {
 	if (!m_isEngineOn)
@@ -40,7 +39,6 @@ bool CCar::SetGear(int newGear)
 	}
 
 	// с заднего хода можно переключиться на первую передачу только на нулевой скорости;
-
 	if (newGear == 1 && m_gear < 1)
 	{
 		if (m_speed != 0)
@@ -48,6 +46,8 @@ bool CCar::SetGear(int newGear)
 	}
 
 	m_gear = newGear;
+
+	ChangeDirection();
 	return true;
 }
 
@@ -62,7 +62,27 @@ bool CCar::SetSpeed(int speed)
 		return false;
 
 	m_speed = speed;
+
+	ChangeDirection();
 	return true;
+}
+
+void CCar::ChangeDirection()
+{
+	if (m_speed == 0)
+	{
+		m_direction = Direction::AT_REST;
+		return;
+	}
+
+	if (m_gear > 0)
+	{
+		m_direction = Direction::FORWARD;
+	}
+	else if (m_gear == -1)
+	{
+		m_direction = Direction::BACKWARD;
+	}
 }
 
 bool CCar::IsEngineOn() const
@@ -90,26 +110,19 @@ bool CCar::IsSpeedInRange(int speed, int gear) const
 	switch (gear)
 	{
 	case -1:
-		if (speed >= 0 && speed <= 20)
-			return true;
+		return (speed >= 0 && speed <= 20) ? true : false;
 	case 0:
-		if (speed >= 0)
-			return true;
+		return (speed >= 0) ? true : false;
 	case 1:
-		if (speed >= 0 && speed <= 30)
-			return true;
+		return (speed >= 0 && speed <= 30) ? true : false;
 	case 2:
-		if (speed >= 20 && speed <= 50)
-			return true;
+		return (speed >= 20 && speed <= 50) ? true : false;
 	case 3:
-		if (speed >= 30 && speed <= 60)
-			return true;
+		return (speed >= 30 && speed <= 60) ? true : false;
 	case 4:
-		if (speed >= 40 && speed <= 90)
-			return true;
+		return (speed >= 40 && speed <= 90) ? true : false;
 	case 5:
-		if (speed >= 50 && speed <= 150)
-			return true;
+		return (speed >= 50 && speed <= 150) ? true : false;
 	default:
 		return false;
 	}

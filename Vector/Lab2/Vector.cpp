@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <iomanip>
 
+// read numbers
 std::vector<double> GetVector(std::istream & stream)
 {
 	return move(std::vector<double>(std::istream_iterator<double>(stream), std::istream_iterator<double>()));

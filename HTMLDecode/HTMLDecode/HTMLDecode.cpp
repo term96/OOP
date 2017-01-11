@@ -31,17 +31,24 @@ string HtmlDecode(string const& html)
 	};
 
 	string text(html);
-	for_each(htmlChars.begin(), htmlChars.end(), [&text](pair<string, string> pair) { FindAndReplace(text, pair.first, pair.second); });
+	
+	for (pair<string, string> pair : htmlChars)
+	{
+		FindAndReplace(text, pair.first, pair.second);
+	}
 
 	return move(text);
 }
 
 bool ReadStream(istream &stream, string &line)
 {
-	if (!stream.eof())
+	if (stream >> line)
 	{
-		getline(stream, line);
 		return true;
 	}
 	return false;
+	/*{
+		return true;
+	}
+	return false;*/
 }

@@ -8,8 +8,8 @@ enum Direction
 class CCar
 {
 public:
-	CCar() {};
-	~CCar() {};
+	CCar() = default;
+	~CCar() = default;
 
 	bool TurnOnEngine();
 	bool TurnOffEngine();
@@ -23,6 +23,7 @@ public:
 private:
 	bool IsSpeedInRange(int speed, int gear) const;
 	bool IsDirectionCorrect(Direction direction, int gear) const;
+	void ChangeDirection();
 
 	bool m_isEngineOn = false;
 	Direction m_direction = Direction::AT_REST;

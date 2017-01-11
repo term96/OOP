@@ -9,6 +9,7 @@ BOOST_AUTO_TEST_SUITE(Vector)
 		stringstream stream;
 		stream << "2.5 10 6";
 		vector<double> numbers = GetVector(stream);
+		//BOOST_CHECK(numbers == {2.5, 10., 6.});
 		BOOST_CHECK(numbers[0] == 2.5);
 		BOOST_CHECK(numbers[1] == 10.);
 		BOOST_CHECK(numbers[2] == 6.);

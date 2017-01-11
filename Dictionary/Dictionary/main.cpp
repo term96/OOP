@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 
 	bool dictionaryChanged = InteractionLoop(dictionary);
 
-	if (dictionaryChanged && NeedToSave())
+	if (dictionaryChanged && IsSaveNeeded())
 	{
 		ofstream output(argv[1]);
 		SaveChanges(dictionary, output);

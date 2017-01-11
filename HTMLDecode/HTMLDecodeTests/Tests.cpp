@@ -107,4 +107,18 @@ BOOST_AUTO_TEST_SUITE(Reading_from_stream)
 		BOOST_CHECK(ReadStream(stream, line));
 		BOOST_CHECK(line.compare(secondLine));
 	}
+
+	BOOST_AUTO_TEST_CASE(rename_me)
+	{
+		stringstream stream;
+		string firstLine = "aaa &amp;amp; aaa";
+		string secondLine = "aaa &amp; aaa";
+		stream << firstLine << secondLine;
+		string line;
+
+		BOOST_CHECK(ReadStream(stream, line));
+		BOOST_CHECK(line.compare(firstLine));
+		BOOST_CHECK(ReadStream(stream, line));
+		BOOST_CHECK(line.compare(secondLine));
+	}
 BOOST_AUTO_TEST_SUITE_END()
