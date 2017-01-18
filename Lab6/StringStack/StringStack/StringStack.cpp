@@ -76,6 +76,7 @@ CStringStack::CStringStack(CStringStack const & stack)
 	catch (...)
 	{
 		Clear();
+		throw;
 	}
 }
 
