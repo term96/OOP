@@ -9,6 +9,7 @@ public:
 	std::string Pop();
 	bool IsEmpty() const;
 	size_t GetSize() const;
+	void Clear();
 
 	CStringStack() = default;
 	CStringStack(CStringStack const & stack);
@@ -28,9 +29,8 @@ private:
 		std::string m_data;
 		Node * m_prev = nullptr;
 	};
-
-	static void Delete(Node * node);
-	Node * m_back = nullptr;
+	
+	Node * m_top = nullptr;
 	size_t m_size = 0;
 };
 

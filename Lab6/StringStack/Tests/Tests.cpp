@@ -26,17 +26,26 @@ BOOST_AUTO_TEST_SUITE(String_stack)
 
 		stack.Push(test1);
 		stack.Push(test2);
-		BOOST_CHECK(!stack.IsEmpty());
+		BOOST_CHECK(stack.GetSize() == 2);
 
 		BOOST_CHECK_EQUAL(test2, stack.Pop());
 		BOOST_CHECK_EQUAL(test1, stack.Pop());
 		BOOST_CHECK(stack.IsEmpty());
 	}
-	BOOST_AUTO_TEST_CASE(Pop_from_empty_stack_throw_exception)
+	BOOST_AUTO_TEST_CASE(Pop_from_empty_stack_throws_exception)
 	{
 		CStringStack stack;
 		BOOST_CHECK(stack.IsEmpty());
 		BOOST_CHECK_THROW(stack.Pop(), length_error);
+	}
+	BOOST_AUTO_TEST_CASE(Stack_can_be_cleared)
+	{
+		CStringStack stack;
+		stack.Push("1");
+		stack.Push("2");
+		BOOST_CHECK(!stack.IsEmpty());
+		stack.Clear();
+		BOOST_CHECK(stack.IsEmpty());
 	}
 	BOOST_AUTO_TEST_CASE(Copy_constructor_works_correctly)
 	{

@@ -9,23 +9,23 @@ void CStringStack::Push(std::string const & data)
 {
 	Node * newNode = new Node(data);
 
-	newNode->m_prev = m_back;
-	m_back = newNode;
+	newNode->m_prev = m_top;
+	m_top = newNode;
 	++m_size;
 }
 
 std::string CStringStack::Pop()
 {
-	if (m_back == nullptr)
+	if (m_top == nullptr)
 	{
 		throw length_error("Stack is empty");
 	}
 
-	string data = move(m_back->m_data);
-	Node * prev = m_back->m_prev;
+	string data = move(m_top->m_data);
+	Node * prev = m_top->m_prev;
 
-	delete(m_back);
-	m_back = prev;
+	delete m_top;
+	m_top = prev;
 	--m_size;
 
 	return move(data);
@@ -41,39 +41,41 @@ size_t CStringStack::GetSize() const
 	return m_size;
 }
 
-void CStringStack::Delete(Node * node)
+void CStringStack::Clear()
 {
-	Node * current = node;
 	Node * prev;
-
-	while (current != nullptr)
+	while (m_top != nullptr)
 	{
-		prev = current->m_prev;
-		delete current;
-		current = prev;
+		prev = m_top->m_prev;
+		delete m_top;
+		m_top = prev;
 	}
+	m_size = 0;
 }
 
 CStringStack::CStringStack(CStringStack const & stack)
 {
 	try
 	{
-		Node * current = stack.m_back;
-		m_back = new Node(current->m_data);
-		current = current->m_prev;
-
-		Node * first = m_back;
-		while (current != nullptr)
+		if (!stack.IsEmpty())
 		{
-			first->m_prev = new Node(current->m_data);
-			first = first->m_prev;
+			Node * current = stack.m_top;
+			m_top = new Node(current->m_data);
 			current = current->m_prev;
+
+			Node * bottom = m_top;
+			while (current != nullptr)
+			{
+				bottom->m_prev = new Node(current->m_data);
+				bottom = bottom->m_prev;
+				current = current->m_prev;
+			}
 		}
 		m_size = stack.m_size;
 	}
 	catch (...)
 	{
-		Delete(m_back);
+		Clear();
 	}
 }
 
@@ -85,21 +87,19 @@ CStringStack::CStringStack(CStringStack && stack)
 void CStringStack::operator=(CStringStack const & stack)
 {
 	CStringStack * newStack = new CStringStack(stack);
-	m_back = newStack->m_back;
-	m_size = newStack->m_size;
-	newStack->m_back = nullptr;
+	*this = move(*newStack);
 	delete newStack;
 }
 
 void CStringStack::operator=(CStringStack && stack)
 {
-	m_back = stack.m_back;
+	m_top = stack.m_top;
 	m_size = stack.m_size;
-	stack.m_back = nullptr;
+	stack.m_top = nullptr;
 	stack.m_size = 0;
 }
 
 CStringStack::~CStringStack()
 {
-	Delete(m_back);
+	Clear();
 }
