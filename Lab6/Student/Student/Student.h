@@ -12,12 +12,12 @@ public:
 	std::string const & GetPatronymic() const;
 	int GetAge() const;
 
-	void Rename(std::string const & name, std::string const & surname, std::string const & patronymic);
+	void Rename(std::string name, std::string surname, std::string patronymic);
 	void SetAge(int age);
 private:
-	bool HasSpaces(std::string const & input) const;
-	void CheckFullName(std::string const & name, std::string const & surname, std::string const & patronymic) const;
-	void CheckAge(int age) const;
+	static bool HasSpaces(std::string const & input);
+	static void CheckFullName(std::string const & name, std::string const & surname, std::string const & patronymic);
+	static void CheckAge(int age);
 
 	std::string m_name;
 	std::string m_surname;

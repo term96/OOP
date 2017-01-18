@@ -1,94 +1,105 @@
 #include "stdafx.h"
 #include "StringStack.h"
 
+#include <iostream>
+
 using namespace std;
 
 void CStringStack::Push(std::string const & data)
 {
-	CNode * newNode = new CNode(data);
+	Node * newNode = new Node(data);
 
-	if (m_first == nullptr)
-	{
-		m_first = newNode;
-		return;
-	}
-
-	CNode * current = m_first;
-	while (current->m_next != nullptr)
-	{
-		current = current->m_next;
-	}
-	current->m_next = newNode;
+	newNode->m_prev = m_back;
+	m_back = newNode;
+	++m_size;
 }
 
 std::string CStringStack::Pop()
 {
-	if (m_first == nullptr)
+	if (m_back == nullptr)
 	{
 		throw length_error("Stack is empty");
 	}
 
-	CNode * current = m_first;
-	CNode * previous = nullptr;
+	string data = move(m_back->m_data);
+	Node * prev = m_back->m_prev;
 
-	while (current->m_next != nullptr)
-	{
-		previous = current;
-		current = current->m_next;
-	}
-	
-	string data = current->m_data;
-	delete current;
-
-	if (previous == nullptr)
-	{
-		m_first = nullptr;
-	}
-	else
-	{
-		previous->m_next = nullptr;
-	}
+	delete(m_back);
+	m_back = prev;
+	--m_size;
 
 	return move(data);
 }
 
 bool CStringStack::IsEmpty() const
 {
-	return m_first == nullptr;
+	return m_size == 0;
 }
 
-void CStringStack::Delete(CNode * node)
+size_t CStringStack::GetSize() const
 {
-	if (node == nullptr)
-	{
-		return;
-	}
-
-	if (node->m_next != nullptr)
-	{
-		Delete(node->m_next);
-	}
-	delete node;
+	return m_size;
 }
 
-
-CStringStack::CStringStack(CStringStack const & stack)
-try
+void CStringStack::Delete(Node * node)
 {
-	CNode * current = stack.m_first;
+	Node * current = node;
+	Node * prev;
+
 	while (current != nullptr)
 	{
-		Push(current->m_data);
-		current = current->m_next;
+		prev = current->m_prev;
+		delete current;
+		current = prev;
 	}
 }
-catch (...)
+
+CStringStack::CStringStack(CStringStack const & stack)
 {
-	Delete(m_first);
-	throw;
+	try
+	{
+		Node * current = stack.m_back;
+		m_back = new Node(current->m_data);
+		current = current->m_prev;
+
+		Node * first = m_back;
+		while (current != nullptr)
+		{
+			first->m_prev = new Node(current->m_data);
+			first = first->m_prev;
+			current = current->m_prev;
+		}
+		m_size = stack.m_size;
+	}
+	catch (...)
+	{
+		Delete(m_back);
+	}
+}
+
+CStringStack::CStringStack(CStringStack && stack)
+{
+	*this = move(stack);
+}
+
+void CStringStack::operator=(CStringStack const & stack)
+{
+	CStringStack * newStack = new CStringStack(stack);
+	m_back = newStack->m_back;
+	m_size = newStack->m_size;
+	newStack->m_back = nullptr;
+	delete newStack;
+}
+
+void CStringStack::operator=(CStringStack && stack)
+{
+	m_back = stack.m_back;
+	m_size = stack.m_size;
+	stack.m_back = nullptr;
+	stack.m_size = 0;
 }
 
 CStringStack::~CStringStack()
 {
-	Delete(m_first);
+	Delete(m_back);
 }

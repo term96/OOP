@@ -27,9 +27,6 @@
     <ClInclude Include="..\StringStack\StringStack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\StringStack\Node.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -42,9 +39,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\StringStack\StringStack.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\StringStack\Node.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

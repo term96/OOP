@@ -2,6 +2,8 @@
 #include "../Student/Student.h"
 #include <sstream>
 
+#include <iostream>
+
 using namespace std;
 
 BOOST_AUTO_TEST_SUITE(Student)
@@ -11,89 +13,151 @@ BOOST_AUTO_TEST_SUITE(Student)
 	int age = 20;
 
 	BOOST_AUTO_TEST_SUITE(Constructor)
-		BOOST_AUTO_TEST_CASE(Good_input)
+		BOOST_AUTO_TEST_CASE(Doesnt_throw_exceptions_on_correct_input)
 		{
 			BOOST_CHECK_NO_THROW(CStudent(name, surname, patronymic, age));
+			
 		}
-		BOOST_AUTO_TEST_CASE(Invalid_name)	
+		BOOST_AUTO_TEST_CASE(Correctly_initialize)
 		{
-			string name1 = "";
-			string name2 = "Неверное имя";
-
-			BOOST_CHECK_THROW(CStudent(name1, surname, patronymic, age), invalid_argument);
-			BOOST_CHECK_THROW(CStudent(name2, surname, patronymic, age), invalid_argument);
+			CStudent student(name, surname, patronymic, age);
+			BOOST_CHECK_EQUAL(student.GetName(), name);
+			BOOST_CHECK_EQUAL(student.GetSurname(), surname);
+			BOOST_CHECK_EQUAL(student.GetPatronymic(), patronymic);
+			BOOST_CHECK_EQUAL(student.GetAge(), age);
 		}
-		BOOST_AUTO_TEST_CASE(Invalid_surname)
+		BOOST_AUTO_TEST_CASE(Throws_exception_on_empty_name)
 		{
-			string surname1 = "";
-			string surname2 = "Неверная фамилия";
-
-			BOOST_CHECK_THROW(CStudent(name, surname1, patronymic, age), invalid_argument);
-			BOOST_CHECK_THROW(CStudent(name, surname2, patronymic, age), invalid_argument);
+			string emptyName;
+			BOOST_CHECK_THROW(CStudent(emptyName, surname, patronymic, age), invalid_argument);
 		}
-		BOOST_AUTO_TEST_CASE(Invalid_or_empty_patronymic)
+		BOOST_AUTO_TEST_CASE(Throws_exception_on_name_with_spaces)
 		{
-			string patronymic1 = "";
-			string patronymic2 = "Неверное отчество";
-
-			BOOST_CHECK_NO_THROW(CStudent(name, surname, patronymic1, age));
-			BOOST_CHECK_THROW(CStudent(name, surname, patronymic2, age), invalid_argument);
+			string nameWithSpaces = "with spaces";
+			BOOST_CHECK_THROW(CStudent(nameWithSpaces, surname, patronymic, age), invalid_argument);
 		}
-		BOOST_AUTO_TEST_CASE(Invalid_age)
+		BOOST_AUTO_TEST_CASE(Throws_exception_on_empty_surname)
 		{
-			int age1 = 13;
-			int age2 = 61;
+			string emptySurname;
+			BOOST_CHECK_THROW(CStudent(name, emptySurname, patronymic, age), invalid_argument);
+		}
+		BOOST_AUTO_TEST_CASE(Throws_exception_on_surname_with_spaces)
+		{
+			string surnameWithSpaces = "with spaces";
+			BOOST_CHECK_THROW(CStudent(name, surnameWithSpaces, patronymic, age), invalid_argument);
+		}
+		BOOST_AUTO_TEST_CASE(Correctly_initializes_on_empty_patronymic)
+		{
+			string emptyPatronymic;
+			BOOST_CHECK_NO_THROW(CStudent(name, surname, emptyPatronymic, age));
 
-			BOOST_CHECK_THROW(CStudent(name, surname, patronymic, age1), out_of_range);
-			BOOST_CHECK_THROW(CStudent(name, surname, patronymic, age2), out_of_range);
+			CStudent student(name, surname, emptyPatronymic, age);
+			BOOST_CHECK_EQUAL(student.GetPatronymic(), emptyPatronymic);
+		}
+		BOOST_AUTO_TEST_CASE(Throws_exception_on_patronymic_with_spaces)
+		{
+			string patronymicWithSpaces = "with spaces";
+			BOOST_CHECK_THROW(CStudent(name, surname, patronymicWithSpaces, age), invalid_argument);
+		}
+		BOOST_AUTO_TEST_CASE(Throws_exception_if_age_is_out_of_range)
+		{
+			int tooBigAge = 61;
+			int tooSmallAge = 13;
+			BOOST_CHECK_THROW(CStudent(name, surname, patronymic, tooBigAge), out_of_range);
+			BOOST_CHECK_THROW(CStudent(name, surname, patronymic, tooSmallAge), out_of_range);
+		}
+		BOOST_AUTO_TEST_CASE(Correctly_initialize_on_age_borders)
+		{
+			int minAge = 14;
+			int maxAge = 60;
+			BOOST_CHECK_NO_THROW(CStudent(name, surname, patronymic, minAge));
+			BOOST_CHECK_NO_THROW(CStudent(name, surname, patronymic, maxAge));
+
+			CStudent studentWithMinAge(name, surname, patronymic, minAge);
+			CStudent studentWithMaxAge(name, surname, patronymic, maxAge);
+			BOOST_CHECK_EQUAL(studentWithMinAge.GetAge(), minAge);
+			BOOST_CHECK_EQUAL(studentWithMaxAge.GetAge(), maxAge);
 		}
 	BOOST_AUTO_TEST_SUITE_END() // Constructor
 
-	CStudent student(name, surname, patronymic, age);
-	BOOST_AUTO_TEST_SUITE(Rename)
-		BOOST_AUTO_TEST_CASE(Good_input)
+	BOOST_AUTO_TEST_SUITE(Rename_function)
+		BOOST_AUTO_TEST_CASE(Correctly_rename_on_correct_input)
 		{
-			BOOST_CHECK_NO_THROW(student.Rename(name, surname, patronymic));
+			CStudent student(name, surname, patronymic, age);
+			string newName = "Name";
+			string newSurname = "Surname";
+			string newPatronymic = "Patronymic";
+			BOOST_CHECK_NO_THROW(student.Rename(newName, newSurname, newPatronymic));
+			BOOST_CHECK_EQUAL(student.GetName(), newName);
+			BOOST_CHECK_EQUAL(student.GetSurname(), newSurname);
+			BOOST_CHECK_EQUAL(student.GetPatronymic(), newPatronymic);
 		}
-		BOOST_AUTO_TEST_CASE(Invalid_name)
+		BOOST_AUTO_TEST_CASE(Throws_exception_on_empty_name)
 		{
-			string name1 = "";
-			string name2 = "Неверное имя";
+			CStudent student(name, surname, patronymic, age);
+			BOOST_CHECK_THROW(student.Rename("", surname, patronymic), invalid_argument);
+			BOOST_CHECK_EQUAL(student.GetName(), name);
+		}
+		BOOST_AUTO_TEST_CASE(Throws_exception_on_name_with_spaces)
+		{
+			CStudent student(name, surname, patronymic, age);
+			BOOST_CHECK_THROW(student.Rename("With Spaces", surname, patronymic), invalid_argument);
+			BOOST_CHECK_EQUAL(student.GetName(), name);
+		}
+		BOOST_AUTO_TEST_CASE(Throws_exception_on_empty_surname)
+		{
+			CStudent student(name, surname, patronymic, age);
+			BOOST_CHECK_THROW(student.Rename(name, "", patronymic), invalid_argument);
+			BOOST_CHECK_EQUAL(student.GetSurname(), surname);
+		}
+		BOOST_AUTO_TEST_CASE(Throws_exception_on_surname_with_spaces)
+		{
+			CStudent student(name, surname, patronymic, age);
+			BOOST_CHECK_THROW(student.Rename(name, "With Spaces", patronymic), invalid_argument);
+			BOOST_CHECK_EQUAL(student.GetSurname(), surname);
+		}
+		BOOST_AUTO_TEST_CASE(Throws_exception_on_patronymic_with_spaces)
+		{
+			CStudent student(name, surname, patronymic, age);
+			BOOST_CHECK_THROW(student.Rename(name, surname, "With Spaces"), invalid_argument);
+			BOOST_CHECK_EQUAL(student.GetPatronymic(), patronymic);
+		}
+		BOOST_AUTO_TEST_CASE(Correctly_rename_on_empty_patronymic)
+		{
+			CStudent student(name, surname, patronymic, age);
+			BOOST_CHECK_NO_THROW(student.Rename(name, surname, ""));
+			BOOST_CHECK_EQUAL(student.GetPatronymic(), "");
+		}
+		BOOST_AUTO_TEST_SUITE_END() // Rename function
 
-			BOOST_CHECK_THROW(student.Rename(name1, surname, patronymic), invalid_argument);
-			BOOST_CHECK_THROW(student.Rename(name2, surname, patronymic), invalid_argument);
-		}
-		BOOST_AUTO_TEST_CASE(Invalid_surname)
+	BOOST_AUTO_TEST_SUITE(SetAge_function)
+		BOOST_AUTO_TEST_CASE(Change_age_correctly_on_correct_input)
 		{
-			string surname1 = "";
-			string surname2 = "Неверная фамилия";
-
-			BOOST_CHECK_THROW(student.Rename(name, surname1, patronymic), invalid_argument);
-			BOOST_CHECK_THROW(student.Rename(name, surname2, patronymic), invalid_argument);
+			CStudent student(name, surname, patronymic, age);
+			int newAge = student.GetAge() + 1;
+			BOOST_CHECK_NO_THROW(student.SetAge(newAge));
+			BOOST_CHECK_EQUAL(student.GetAge(), newAge);
 		}
-		BOOST_AUTO_TEST_CASE(Invalid_or_empty_patronymic)
+		BOOST_AUTO_TEST_CASE(Change_age_correctly_on_upper_border)
 		{
-			string patronymic1 = "";
-			string patronymic2 = "Неверное отчество";
-
-			BOOST_CHECK_NO_THROW(student.Rename(name, surname, patronymic1));
-			BOOST_CHECK_THROW(student.Rename(name, surname, patronymic2), invalid_argument);
+			CStudent student(name, surname, patronymic, age);
+			int newAge = 60;
+			BOOST_CHECK_NO_THROW(student.SetAge(newAge));
+			BOOST_CHECK_EQUAL(student.GetAge(), newAge);
 		}
-	BOOST_AUTO_TEST_SUITE_END() // Rename
-	BOOST_AUTO_TEST_SUITE(Set_age)
-		BOOST_AUTO_TEST_CASE(Good_input)
+		BOOST_AUTO_TEST_CASE(Throws_exception_if_age_decreased)
 		{
-			BOOST_CHECK_NO_THROW(student.SetAge(age));
-		}
-		BOOST_AUTO_TEST_CASE(New_age_less_than_old)
-		{
-			int newAge = 19;
+			CStudent student(name, surname, patronymic, age);
+			int newAge = student.GetAge() - 1;
 			BOOST_CHECK_THROW(student.SetAge(newAge), domain_error);
+			BOOST_CHECK_EQUAL(student.GetAge(), age);
 		}
-		BOOST_AUTO_TEST_CASE(Out_of_range)
+		BOOST_AUTO_TEST_CASE(Throws_exception_if_age_larger_than_max)
 		{
+			CStudent student(name, surname, patronymic, age);
 			int newAge = 61;
 			BOOST_CHECK_THROW(student.SetAge(newAge), out_of_range);
+			BOOST_CHECK_EQUAL(student.GetAge(), age);
 		}
-	BOOST_AUTO_TEST_SUITE_END() // Set age
+		BOOST_AUTO_TEST_SUITE_END() // SetAge function
 BOOST_AUTO_TEST_SUITE_END()

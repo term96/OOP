@@ -36,27 +36,13 @@ int CStudent::GetAge() const
 	return m_age;
 }
 
-void CStudent::Rename(std::string const & name, std::string const & surname, std::string const & patronymic)
+void CStudent::Rename(std::string name, std::string surname, std::string patronymic)
 {
 	CheckFullName(name, surname, patronymic);
 
-	string oldName(m_name);
-	string oldSurname(m_surname);
-	string oldPatronymic(m_patronymic);
-
-	try
-	{
-		m_name = name;
-		m_surname = surname;
-		m_patronymic = patronymic;
-	}
-	catch (...)
-	{
-		m_name = move(oldName);
-		m_surname = move(oldSurname);
-		m_patronymic = move(oldPatronymic);
-		throw;
-	}
+	m_name = move(name);
+	m_surname = move(surname);
+	m_patronymic = move(patronymic);
 }
 
 void CStudent::SetAge(int age)
@@ -70,7 +56,7 @@ void CStudent::SetAge(int age)
 	m_age = age;
 }
 
-bool CStudent::HasSpaces(std::string const & input) const
+bool CStudent::HasSpaces(std::string const & input)
 {
 	if (input.find(' ') == string::npos)
 	{
@@ -79,7 +65,7 @@ bool CStudent::HasSpaces(std::string const & input) const
 	return true;
 }
 
-void CStudent::CheckFullName(std::string const & name, std::string const & surname, std::string const & patronymic) const
+void CStudent::CheckFullName(std::string const & name, std::string const & surname, std::string const & patronymic)
 {
 	if (name.empty() || HasSpaces(name))
 	{
@@ -95,7 +81,7 @@ void CStudent::CheckFullName(std::string const & name, std::string const & surna
 	}
 }
 
-void CStudent::CheckAge(int age) const
+void CStudent::CheckAge(int age)
 {
 	if (age < 14 || age > 60)
 	{
