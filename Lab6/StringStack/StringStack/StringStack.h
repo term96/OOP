@@ -16,8 +16,8 @@ public:
 	CStringStack(CStringStack && stack);
 	~CStringStack();
 
-	void operator=(CStringStack const & stack);
-	void operator=(CStringStack && stack);
+	CStringStack & operator=(CStringStack const & stack);
+	CStringStack & operator=(CStringStack && stack);
 private:
 	struct Node
 	{

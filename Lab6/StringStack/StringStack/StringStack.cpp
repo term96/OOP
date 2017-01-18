@@ -85,19 +85,21 @@ CStringStack::CStringStack(CStringStack && stack)
 	*this = move(stack);
 }
 
-void CStringStack::operator=(CStringStack const & stack)
+CStringStack & CStringStack::operator=(CStringStack const & stack)
 {
 	CStringStack * newStack = new CStringStack(stack);
 	*this = move(*newStack);
 	delete newStack;
+	return *this;
 }
 
-void CStringStack::operator=(CStringStack && stack)
+CStringStack & CStringStack::operator=(CStringStack && stack)
 {
 	m_top = stack.m_top;
 	m_size = stack.m_size;
 	stack.m_top = nullptr;
 	stack.m_size = 0;
+	return *this;
 }
 
 CStringStack::~CStringStack()
